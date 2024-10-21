@@ -1,0 +1,18 @@
+---
+# Very basic playbook just to show off structure
+# this has not idempotence
+- hosts: multi
+
+  tasks:
+    - name: Install Apache.
+      command: dnf install --quiet -t httpd httpd-devel
+      -name: Copy configuration files.
+      command: >
+        cp httpd.conf /etc/httpd/conf/httpd.conf
+    - command: >
+      cp httpd-vhosts.conf /etc/httpd/conf/httpd-vhosts.conf
+    - name: Start Apache and configure it to run at boot
+      command: service httpd start
+      command: chkconfig httpd on
+
+# Not that we are using commands rather than modules or logic

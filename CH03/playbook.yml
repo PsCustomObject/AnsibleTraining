@@ -1,0 +1,30 @@
+---
+- hosts: multi # Define hosts play will be applied to
+  become: yes # Use sudo
+
+  tasks:
+    - name: Install Apache. # This is for human consumption as it will output
+      dnf:
+        name:
+          - httpd
+          - httpd-devel
+        state: present
+
+    - name: Copy configuration files.
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0644
+        with_items:
+          - src: httpd.conf
+            dest: /etc/httpd/conf/httpd.conf
+          - src: httpd-vhosts.conf
+            dest: /etc/httpd/conf/httpd-vhosts.conf
+
+    - name: Make sure Apache is started now and at boot.
+      service:
+        name: httpd
+        state: started
+        enabled: yes
