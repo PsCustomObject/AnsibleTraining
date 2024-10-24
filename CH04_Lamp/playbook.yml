@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+
+  var_files:
+    - vars.yml
+
+  - pre_tasks:
+    - name: Updae apt cache if older than 1 hour
+      apt: 
+        update_cache = yes
+        cache_valid_time = 3600
